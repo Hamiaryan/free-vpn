@@ -1,0 +1,11 @@
+{
+    "name": "xray-vpn-server",
+    "version": "1.0.0",
+    "description": "Free VPN server using Xray on Replit",
+    "main": "setup-xray.sh",
+    "scripts": {
+        "start": "bash setup-xray.sh"
+    },
+    "author": "",
+    "license": "MIT"
+}
