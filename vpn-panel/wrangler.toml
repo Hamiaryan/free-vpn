@@ -1,0 +1,20 @@
+name = "vpn-panel"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "vpn-configs"
+database_id = "your-database-id" # Will be set after creating D1 database
+
+# Assets binding for static files
+[site]
+bucket = "./public"
+
+# Environment variables
+[vars]
+API_BASE = "https://your-worker.workers.dev"
+XRAY_SERVER = "workspace.HamiArian.repl.co"
+XRAY_PORT = "443"
+XRAY_PATH = "/xray"

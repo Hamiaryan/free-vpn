@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>پنل مدیریت VPN - ساخت کانفیگ رایگان</title>
+    <meta name="description" content="ساخت و مدیریت کانفیگ VPN رایگان با قابلیت مشاهده مصرف و تاریخ انقضا">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="bg-gradient"></div>
+    <div class="bg-pattern"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 2L4 10v12l12 8 12-8V10L16 2z" fill="url(#logo-gradient)"/>
+                        <defs>
+                            <linearGradient id="logo-gradient" x1="4" y1="2" x2="28" y2="30">
+                                <stop offset="0%" stop-color="#667eea"/>
+                                <stop offset="100%" stop-color="#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>VPN Panel</span>
+                </div>
+                <nav class="nav">
+                    <a href="#home" class="nav-link active">خانه</a>
+                    <a href="#configs" class="nav-link">کانفیگ‌ها</a>
+                    <a href="#about" class="nav-link">درباره</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero" id="home">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">VPN رایگان و امن</span>
+                        <br>برای همه
+                    </h1>
+                    <p class="hero-description">
+                        ساخت و مدیریت کانفیگ VPN با قابلیت مشاهده مصرف، تاریخ انقضا و دانلود QR Code
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="showCreateConfig()">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 4v12m-6-6h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            ساخت کانفیگ جدید
+                        </button>
+                        <button class="btn btn-secondary" onclick="scrollToConfigs()">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h2M13 5h2a2 2 0 012 2v10a2 2 0 01-2 2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            مشاهده کانفیگ‌ها
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">🚀</div>
+                        <div class="stat-value" id="total-configs">0</div>
+                        <div class="stat-label">کانفیگ فعال</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="total-usage">0 GB</div>
+                        <div class="stat-label">مصرف کل</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-value">24/7</div>
+                        <div class="stat-label">آنلاین</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Create Config Form -->
+            <section class="create-config" id="create-config-section" style="display: none;">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>ساخت کانفیگ جدید</h2>
+                        <button class="btn-close" onclick="hideCreateConfig()">×</button>
+                    </div>
+                    <form id="create-config-form" class="config-form">
+                        <div class="form-group">
+                            <label for="config-name">نام کانفیگ</label>
+                            <input type="text" id="config-name" placeholder="مثال: کانفیگ شخصی من" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="config-limit">محدودیت ترافیک (GB)</label>
+                            <select id="config-limit">
+                                <option value="10">10 GB - رایگان</option>
+                                <option value="50">50 GB - رایگان</option>
+                                <option value="100">100 GB - رایگان</option>
+                                <option value="0">نامحدود - رایگان</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="config-expiry">مدت اعتبار</label>
+                            <select id="config-expiry">
+                                <option value="7">۷ روز</option>
+                                <option value="30">۳۰ روز</option>
+                                <option value="90">۹۰ روز</option>
+                                <option value="365">۱ سال</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="config-protocol">پروتکل</label>
+                            <select id="config-protocol">
+                                <option value="vmess">VMess (پیشنهادی)</option>
+                                <option value="vless">VLESS</option>
+                                <option value="trojan">Trojan</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 4v12m-6-6h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            ساخت کانفیگ
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Configs List -->
+            <section class="configs-section" id="configs">
+                <div class="section-header">
+                    <h2>کانفیگ‌های من</h2>
+                    <button class="btn btn-sm btn-primary" onclick="showCreateConfig()">
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 4v12m-6-6h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        جدید
+                    </button>
+                </div>
+                <div id="configs-list" class="configs-list">
+                    <!-- Configs will be loaded here -->
+                    <div class="empty-state">
+                        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                            <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="2" opacity="0.2"/>
+                            <path d="M40 20v40M20 40h40" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <h3>هنوز کانفیگی ندارید</h3>
+                        <p>برای شروع، اولین کانفیگ خودتون رو بسازید</p>
+                        <button class="btn btn-primary" onclick="showCreateConfig()">ساخت کانفیگ</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>ساخته شده با ❤️ برای اینترنت آزاد</p>
+            <div class="footer-links">
+                <a href="https://github.com/Hamiaryan/free-vpn" target="_blank">GitHub</a>
+                <a href="#about">درباره ما</a>
+                <a href="#support">پشتیبانی</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Config Detail Modal -->
+    <div id="config-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">جزئیات کانفیگ</h3>
+                <button class="btn-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+        <div class="modal-overlay" onclick="closeModal()"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
