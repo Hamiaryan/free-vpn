@@ -1,0 +1,15 @@
+{
+    "name": "vpn-panel",
+    "version": "1.0.0",
+    "description": "VPN Management Panel with Cloudflare Workers + D1",
+    "main": "worker.js",
+    "scripts": {
+        "deploy": "wrangler deploy",
+        "dev": "wrangler dev"
+    },
+    "dependencies": {
+        "@cloudflare/kv-asset-handler": "^0.3.0"
+    },
+    "author": "",
+    "license": "MIT"
+}

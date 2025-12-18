@@ -6,7 +6,7 @@ compatibility_date = "2024-01-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "vpn-configs"
-database_id = "your-database-id" # Will be set after creating D1 database
+database_id = "a158a19a-5bfd-4230-86a0-6014d484edf2"
 
 # Assets binding for static files
 [site]

@@ -1,8 +1,10 @@
 // Cloudflare Worker - VPN Panel API
 // Handles config management, usage tracking, and statistics
 
+import { getAssetFromKV } from '@cloudflare/kv-asset-handler';
+
 export default {
-    async fetch(request, env) {
+    async fetch(request, env, ctx) {
         const url = new URL(request.url);
         const path = url.pathname;
 
@@ -20,34 +22,46 @@ export default {
 
         try {
             // API Routes
-            if (path === '/api/configs' && request.method === 'GET') {
-                return handleGetConfigs(env, corsHeaders);
+            if (path.startsWith('/api/')) {
+                if (path === '/api/configs' && request.method === 'GET') {
+                    return handleGetConfigs(env, corsHeaders);
+                }
+
+                if (path === '/api/configs' && request.method === 'POST') {
+                    return handleCreateConfig(request, env, corsHeaders);
+                }
+
+                if (path.startsWith('/api/configs/') && request.method === 'DELETE') {
+                    const id = path.split('/')[3];
+                    return handleDeleteConfig(id, env, corsHeaders);
+                }
+
+                if (path.startsWith('/api/configs/') && path.endsWith('/usage')) {
+                    const id = path.split('/')[3];
+                    return handleUpdateUsage(id, request, env, corsHeaders);
+                }
+
+                if (path === '/api/stats') {
+                    return handleGetStats(env, corsHeaders);
+                }
             }
 
-            if (path === '/api/configs' && request.method === 'POST') {
-                return handleCreateConfig(request, env, corsHeaders);
+            // Serve static files using Workers Sites
+            try {
+                return await getAssetFromKV(
+                    {
+                        request,
+                        waitUntil: ctx.waitUntil.bind(ctx),
+                    },
+                    {
+                        ASSET_NAMESPACE: env.__STATIC_CONTENT,
+                        ASSET_MANIFEST: JSON.parse(env.__STATIC_CONTENT_MANIFEST),
+                    }
+                );
+            } catch (e) {
+                // If asset not found, return 404
+                return new Response('Not Found', { status: 404 });
             }
-
-            if (path.startsWith('/api/configs/') && request.method === 'DELETE') {
-                const id = path.split('/')[3];
-                return handleDeleteConfig(id, env, corsHeaders);
-            }
-
-            if (path.startsWith('/api/configs/') && path.endsWith('/usage')) {
-                const id = path.split('/')[3];
-                return handleUpdateUsage(id, request, env, corsHeaders);
-            }
-
-            if (path === '/api/stats') {
-                return handleGetStats(env, corsHeaders);
-            }
-
-            // Serve static files from vpn-panel folder
-            if (path === '/' || path === '/index.html') {
-                return env.ASSETS.fetch(request);
-            }
-
-            return new Response('Not Found', { status: 404, headers: corsHeaders });
 
         } catch (error) {
             return new Response(JSON.stringify({ error: error.message }), {
