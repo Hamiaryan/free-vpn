@@ -1,0 +1,7 @@
+node_modules/
+.wrangler/
+*.log
+connection-info.txt
+xray/
+*.zip
+.DS_Store

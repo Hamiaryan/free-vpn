@@ -1,0 +1,22 @@
+{
+  "name": "cloudflare-vpn-proxy",
+  "version": "1.0.0",
+  "description": "پروکسی رایگان با Cloudflare Workers",
+  "main": "worker.js",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "tail": "wrangler tail"
+  },
+  "keywords": [
+    "proxy",
+    "vpn",
+    "cloudflare",
+    "workers"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

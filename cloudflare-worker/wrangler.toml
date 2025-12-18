@@ -1,0 +1,19 @@
+name = "free-vpn-proxy"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# تنظیمات اصلی
+account_id = "" # اینجا رو پر کنید بعد از login
+workers_dev = true
+
+# محدودیت‌های رایگان Cloudflare Workers:
+# - 100,000 requests روزانه
+# - 10ms CPU time per request
+# - کاملاً کافی برای استفاده شخصی!
+
+[env.production]
+name = "free-vpn-proxy"
+routes = [
+  # اگر دامنه شخصی دارید اینجا اضافه کنید
+  # { pattern = "proxy.yourdomain.com", zone_name = "yourdomain.com" }
+]
